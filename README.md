@@ -1,6 +1,6 @@
 <div align="center">
 
-# LLM-Powered W&B
+# LogLLM
 
 A package that automates the extraction of experimental conditions from your Python scripts with GPT4o-mini, and logs results using Weights & Biases (W&B).
 
