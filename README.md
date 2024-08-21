@@ -26,12 +26,10 @@ Here is a simplified example of how to use the package:
 from logllm import logllm
 
 # Specify your parameters
-notebook_path = 'your_notebook.ipynb'  # Path to your Jupyter Notebook
-api_key = 'your_openai_api_key'  # Replace with your OpenAI API key
-project_name = 'your_project_name'  # Name of your W&B project
+notebook_path = 'your_notebook.ipynb'  # Path to your Jupyter Notebook for your ML experiment
 
-# Process the notebook
-logllm(notebook_path, api_key, project_name)
+# Log the experiment
+logllm(notebook_path)
 ```
 
 ## Contributing
