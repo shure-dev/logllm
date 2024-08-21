@@ -1,45 +1,53 @@
-<h1 style="text-align: center;">LLM-Powered W&B</h1>
 
-<p style="text-align: center;">
-  A tool that automates the extraction of experimental conditions from your machine learning scripts and saves them using the Weights & Biases (W&B) API.
-</p>
+# LLM-Powered W&B
 
-<p style="text-align: center;">
-  Better than MLflow's Autolog, this tool automates everything for seamless experiment tracking.
-</p>
+A package that automates the extraction of experimental conditions from Jupyter Notebooks, sends them to OpenAI, and logs the results using Weights & Biases (W&B).
 
-<h2 style="text-align: center;">Features</h2>
-<ul style="text-align: center;">
-  <li>Automated extraction and logging of experimental conditions</li>
-  <li>Streamlined workflows for data scientists</li>
-  <li>Enhanced documentation and reproducibility</li>
-  <li>Comprehensive automation for seamless integration</li>
-</ul>
+## Features
 
-<h2 style="text-align: center;">Installation</h2>
-<pre style="text-align: center;">
-pip install llm-powered-wandb
-</pre>
+- Automatically extracts code from Jupyter Notebook files.
+- Sends extracted code to OpenAI for processing.
+- Logs responses to Weights & Biases (W&B) for easy tracking and analysis.
+- Simplifies the workflow for researchers and data scientists.
 
-<h2 style="text-align: center;">Usage</h2>
-<pre style="text-align: center;">
-import wandb
-from llm_powered_wandb import LLMLogger
+## Installation
+
+To install the package, run the following command in your terminal:
+
+```bash
+pip install -e .
+```
+
+This command installs the package in editable mode, allowing you to modify the code and see changes without reinstalling.
+
+## Usage
+
+Here is a basic example of how to use the package:
+
+```python
+from llm_powered_wandb import extract_notebook_code, send_code_to_openai, log_to_wandb, init_wandb
 
 # Initialize W&B
-wandb.init(project="your_project_name")
+init_wandb(project_name='your_project_name')
 
-# Log with LLM
-logger = LLMLogger()
-logger.log_experiment(params)
-</pre>
+# Extract code from Jupyter Notebook
+notebook_path = 'your_notebook.ipynb'  # Specify your notebook path
+code_string = extract_notebook_code(notebook_path)
 
-<h2 style="text-align: center;">Contributing</h2>
-<p style="text-align: center;">
-  Contributions are welcome! Please open an issue or submit a pull request.
-</p>
+# Send code to OpenAI
+api_key = 'your_openai_api_key'  # Replace with your OpenAI API key
+response_text = send_code_to_openai(api_key, code_string)
 
-<h2 style="text-align: center;">License</h2>
-<p style="text-align: center;">
-  This project is licensed under the MIT License.
-</p>
+# Log response to W&B
+log_to_wandb(response_text)
+
+print("Response from OpenAI logged to W&B.")
+```
+
+## Contributing
+
+Contributions are welcome! If you have suggestions or improvements, please feel free to submit an issue or a pull request.
+
+## License
+
+This project is licensed under the MIT License.
