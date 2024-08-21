@@ -1,7 +1,11 @@
 <h1 style="text-align: center;">LLM-Powered W&B</h1>
 
 <p style="text-align: center;">
-  A tool that automates machine learning logging using Large Language Models (LLMs) with Weights & Biases (W&B).
+  A tool that automates the extraction of experimental conditions from your machine learning scripts and saves them using the Weights & Biases (W&B) API.
+</p>
+
+<p style="text-align: center;">
+  Better than MLflow's Autologger, this tool automates everything for seamless experiment tracking.
 </p>
 
 <h2 style="text-align: center;">Features</h2>
@@ -9,6 +13,7 @@
   <li>Automated extraction and logging of experimental conditions</li>
   <li>Streamlined workflows for data scientists</li>
   <li>Enhanced documentation and reproducibility</li>
+  <li>Comprehensive automation for seamless integration</li>
 </ul>
 
 <h2 style="text-align: center;">Installation</h2>
