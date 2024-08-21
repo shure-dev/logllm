@@ -1,15 +1,17 @@
-import openai
+from openai import OpenAI
 import wandb
 from .extractor import extract_notebook_code
+import os
 
 def init_wandb(project_name):
     wandb.init(project=project_name)
 
-def send_code_to_openai(api_key, code):
-    openai.api_key = api_key
+def extract_experimental_conditions(code):
+    client = OpenAI()
+    
     prompt = f"Here is a Jupyter Notebook code:\n\n{code}\n\nPlease extract the experimental conditions and log them using the W&B API."
     
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}]
     )
@@ -19,7 +21,7 @@ def send_code_to_openai(api_key, code):
 def log_to_wandb(response_text):
     wandb.log({"openai_response": response_text})
 
-def process_notebook(notebook_path, api_key, project_name):
+def logllm(notebook_path, project_name):
     # Initialize W&B
     init_wandb(project_name)
     
@@ -27,7 +29,7 @@ def process_notebook(notebook_path, api_key, project_name):
     code_string = extract_notebook_code(notebook_path)
 
     # Send code to OpenAI
-    response_text = send_code_to_openai(api_key, code_string)
+    response_text = extract_experimental_conditions(code_string)
 
     # Log response to W&B
     log_to_wandb(response_text)
