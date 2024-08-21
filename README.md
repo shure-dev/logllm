@@ -22,26 +22,18 @@ This command installs the package in editable mode, allowing you to modify the c
 
 ## Usage
 
-Here is a basic example of how to use the package:
+Here is a simplified example of how to use the package:
 
-```python
-from llm_powered_wandb import extract_notebook_code, send_code_to_openai, log_to_wandb, init_wandb
+```pytho
+from llm_powered_wandb import process_notebook
 
-# Initialize W&B
-init_wandb(project_name='your_project_name')
-
-# Extract code from Jupyter Notebook
-notebook_path = 'your_notebook.ipynb'  # Specify your notebook path
-code_string = extract_notebook_code(notebook_path)
-
-# Send code to OpenAI
+# Specify your parameters
+notebook_path = 'your_notebook.ipynb'  # Path to your Jupyter Notebook
 api_key = 'your_openai_api_key'  # Replace with your OpenAI API key
-response_text = send_code_to_openai(api_key, code_string)
+project_name = 'your_project_name'  # Name of your W&B project
 
-# Log response to W&B
-log_to_wandb(response_text)
-
-print("Response from OpenAI logged to W&B.")
+# Process the notebook
+process_notebook(notebook_path, api_key, project_name)
 ```
 
 ## Contributing
