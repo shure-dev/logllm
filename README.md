@@ -5,7 +5,7 @@
 </p>
 
 <p style="text-align: center;">
-  Better than MLflow's Autologger, this tool automates everything for seamless experiment tracking.
+  Better than MLflow's Autolog, this tool automates everything for seamless experiment tracking.
 </p>
 
 <h2 style="text-align: center;">Features</h2>
