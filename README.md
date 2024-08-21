@@ -24,7 +24,7 @@ This command installs the package in editable mode, allowing you to modify the c
 
 Here is a simplified example of how to use the package:
 
-```pytho
+```python
 from llm_powered_wandb import process_notebook
 
 # Specify your parameters
