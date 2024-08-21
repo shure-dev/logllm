@@ -22,11 +22,19 @@ This command installs the package in editable mode, allowing you to modify the c
 ## Usage
 Here is a simplified example of how to use the package:
 
+
 ```bash
 export OPENAI_API_KEY="your-openai-api-key"
+wandb login
 ```
 
+`sample-script.ipynb`
 ```python
+
+###
+# Your machine learning script is here.
+###
+
 from logllm import logllm
 
 notebook_path = "sample-script.ipynb" # Here is target file to log
@@ -34,6 +42,9 @@ project_name = "sample-project" # project name for wandb
 
 logllm(notebook_path,project_name)
 ```
+
+Check the demo code:  
+https://github.com/shure-dev/logllm/blob/main/demos/svc-sample.ipynb
 
 ## Contributing
 Contributions are welcome! If you have suggestions or improvements, please feel free to submit an issue or a pull request.

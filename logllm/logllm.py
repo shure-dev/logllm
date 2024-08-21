@@ -1,27 +1,58 @@
 from openai import OpenAI
 import wandb
 from .extractor import extract_notebook_code
-import os
+import json
+# import logging
+
+# wandb.logger.setLevel(logging.ERROR)
 
 def init_wandb(project_name):
-    wandb.init(project=project_name)
+    wandb.init(project=project_name, settings=wandb.Settings(_disable_stats=True))
 
 def extract_experimental_conditions(code):
     client = OpenAI()
     
-    prompt = f"Here is a Jupyter Notebook code:\n\n{code}\n\nPlease extract the experimental conditions and log them using the W&B API."
+    prompt = f"""
+        # Please extract all experimental conditions and results for logging via wandb api. 
+        # Extract all informaiton you can find the given script
+        # Output JSON schema:
+        {{
+            "param_name_1":"",
+            "param_name_2":"",
+            "condition":"here is condition as natural language description"
+        }}
+        # Here is a Jupyter Notebook script:{code}
+    """
     
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}]
+        model="gpt-4o-mini-2024-07-18",
+        messages=[{"role": "user", "content": prompt}],
+        response_format = { "type": "json_object" }
     )
     
-    return response.choices[0].message['content']
+    # print(response.choices[0].message.content)
+    
+    return response.choices[0].message.content
 
 def log_to_wandb(response_text):
-    wandb.log({"openai_response": response_text})
+    print(response_text)
+    wandb.log(json.loads(response_text))
 
 def logllm(notebook_path, project_name):
+    
+    # import psutil
+
+    # def get_notebook_name():
+    #     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+    #         if proc.info['name'] == 'python' and 'jupyter-notebook' in proc.info['cmdline']:
+    #             for cmd in proc.info['cmdline']:
+    #                 if cmd.endswith('.ipynb'):
+    #                     return cmd
+    #     return None
+
+    # notebook_name = get_notebook_name()
+    # print(f"Notebook Name: {notebook_name}")
+    
     # Initialize W&B
     init_wandb(project_name)
     
