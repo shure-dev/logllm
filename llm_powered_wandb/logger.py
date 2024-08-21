@@ -1,5 +1,6 @@
 import openai
 import wandb
+from .extractor import extract_notebook_code
 
 def init_wandb(project_name):
     wandb.init(project=project_name)
@@ -17,4 +18,18 @@ def send_code_to_openai(api_key, code):
 
 def log_to_wandb(response_text):
     wandb.log({"openai_response": response_text})
-    wandb.finish()
+
+def process_notebook(notebook_path, api_key, project_name):
+    # Initialize W&B
+    init_wandb(project_name)
+    
+    # Extract code from Jupyter Notebook
+    code_string = extract_notebook_code(notebook_path)
+
+    # Send code to OpenAI
+    response_text = send_code_to_openai(api_key, code_string)
+
+    # Log response to W&B
+    log_to_wandb(response_text)
+
+    print("Response from OpenAI logged to W&B.")
