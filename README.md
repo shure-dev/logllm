@@ -9,8 +9,7 @@ A package that automates the extraction of experimental conditions from your Pyt
 </div>
 
 ## Features
-- Automatically extracts code from Jupyter Notebook files.
-- Sends extracted code to OpenAI to get experimental conditions.
+- Automatically extracts code from Jupyter Notebook files with GPT4o.
 - Logs responses to Weights & Biases (W&B) for easy tracking and analysis.
 - Simplifies the ml development workflow for researchers and data scientists.
 
@@ -24,7 +23,7 @@ This command installs the package in editable mode, allowing you to modify the c
 ## Usage
 Here is a simplified example of how to use the package:
 ```python
-from llm_powered_wandb import process_notebook
+from logllm import logllm
 
 # Specify your parameters
 notebook_path = 'your_notebook.ipynb'  # Path to your Jupyter Notebook
@@ -32,7 +31,7 @@ api_key = 'your_openai_api_key'  # Replace with your OpenAI API key
 project_name = 'your_project_name'  # Name of your W&B project
 
 # Process the notebook
-process_notebook(notebook_path, api_key, project_name)
+logllm(notebook_path, api_key, project_name)
 ```
 
 ## Contributing
