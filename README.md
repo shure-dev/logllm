@@ -1,7 +1,7 @@
 
 # LLM-Powered W&B
 
-A package that automates the extraction of experimental conditions from Jupyter Notebooks, sends them to OpenAI, and logs the results using Weights & Biases (W&B).
+A package that automates the extraction of experimental conditions from Jupyter Notebooks with GPT4o-mini, and logs results using Weights & Biases (W&B).
 
 ## Features
 
