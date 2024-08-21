@@ -4,7 +4,7 @@
 
 A package that automates the extraction of experimental conditions from your Python scripts with GPT4o-mini, and logs results using Weights & Biases (W&B).
 
-[Project Website](https://sites.google.com/view/llm-powered-wandb/home) | [Discord Community](https://discord.gg/3xvUV6xcKW)
+[Project Website](https://logllm.tiiny.site/) | [Discord Community](https://discord.gg/3xvUV6xcKW)
 
 </div>
 
