@@ -8,7 +8,7 @@ A package that automates the extraction of experimental conditions from your Pyt
 - Automatically extracts code from Jupyter Notebook files.
 - Sends extracted code to OpenAI to get experimental conditions.
 - Logs responses to Weights & Biases (W&B) for easy tracking and analysis.
-- Simplifies the workflow for researchers and data scientists.
+- Simplifies the ml development workflow for researchers and data scientists.
 
 ## Installation
 
