@@ -3,6 +3,10 @@
 
 A package that automates the extraction of experimental conditions from your Python scripts with GPT4o-mini, and logs results using Weights & Biases (W&B).
 
+https://sites.google.com/view/llm-powered-wandb/home
+
+https://discord.gg/3xvUV6xcKW
+
 ## Features
 
 - Automatically extracts code from Jupyter Notebook files.
