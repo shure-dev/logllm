@@ -9,27 +9,30 @@ A package that automates the extraction of experimental conditions from your Pyt
 </div>
 
 ## Features
-- Automatically extracts code from Jupyter Notebook files with GPT4o.
-- Logs responses to Weights & Biases (W&B) for easy tracking and analysis.
-- Simplifies the ml development workflow for researchers and data scientists.
+- Automatically extracts code from Jupyter Notebook files with GPT4o then save extracted logs to Weights & Biases (W&B) for easy tracking and analysis.
 
 ## Installation
 To install the package, run the following command in your terminal:
 ```bash
 pip install -e .
 ```
+
 This command installs the package in editable mode, allowing you to modify the code and see changes without reinstalling.
 
 ## Usage
 Here is a simplified example of how to use the package:
+
+```bash
+export OPENAI_API_KEY="your-openai-api-key"
+```
+
 ```python
 from logllm import logllm
 
-# Specify your parameters
-notebook_path = 'your_notebook.ipynb'  # Path to your Jupyter Notebook for your ML experiment
+notebook_path = "sample-script.ipynb" # Here is target file to log
+project_name = "sample-project" # project name for wandb
 
-# Log the experiment
-logllm(notebook_path)
+logllm(notebook_path,project_name)
 ```
 
 ## Contributing

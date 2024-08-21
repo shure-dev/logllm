@@ -10,4 +10,5 @@ def extract_notebook_code(notebook_path):
             code_cells.append(''.join(cell['source']))
     
     full_code = "\n".join(code_cells)
+    print("Extracted script",full_code)
     return full_code
