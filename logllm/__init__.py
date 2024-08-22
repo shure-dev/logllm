@@ -1,1 +1,1 @@
-from .logllm import logllm
+from .logllm import log_llm

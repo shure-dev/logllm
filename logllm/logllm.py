@@ -60,7 +60,7 @@ def log_to_wandb(response_text):
     wandb.log(json.loads(response_text))
 
 
-def logllm(notebook_path, project_name):
+def log_llm(notebook_path, project_name):
     # import psutil
 
     # def get_notebook_name():

@@ -36,12 +36,12 @@ wandb login
 # Your machine learning script is here.
 ###
 
-from logllm import logllm
+from logllm import log_llm
 
 notebook_path = "sample-script.ipynb" # Here is target file to log
 project_name = "sample-project" # project name for wandb
 
-logllm(notebook_path,project_name)
+log_llm(notebook_path,project_name)
 ```
 
 
