@@ -40,14 +40,14 @@ wandb login
 ```python
 ###
 # Your machine learning script goes here.
+# Experimental conditions are extracted from here.
 ###
 
 from logllm import log_llm
 
 notebook_path = "sample-script.ipynb"  # The target file to log
-project_name = "sample-project"        # Project name for W&B
 
-log_llm(notebook_path, project_name)
+log_llm(notebook_path)
 ```
 
 ## 🧠 **How It Works: Simple and Powerful!**
