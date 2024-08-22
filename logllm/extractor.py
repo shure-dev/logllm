@@ -24,8 +24,6 @@ def extract_notebook_code(notebook_path):
                     output_content = ''.join(output['data']['text/plain'])
                     all_cells.append(output_content)
         
-        # print("Cell content:", source_content)  # デバッグ用に各セルの内容を表示
-
     full_content = "\n".join(all_cells)
-    # print("Extracted content:", full_content)  # 全体の内容を表示
+
     return full_content
