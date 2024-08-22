@@ -21,21 +21,22 @@ def extract_experimental_conditions(code):
         # If you use natural language, answer should be very short.
         # Do not include information already provided in param_name_1 for `condition_as_natural_langauge`.
         # Output JSON schema example:
-        This is just a example, make it change as you want.
+        This is just a example, make it change as you want. Use nested dictionally if nessasary.
         {{
             "method":"str",
             "dataset":"str",
             "task":"str",
-            "is_advanced_method":bool,
-            "is_latest_method":"",
             "accuracy":"",
-            "other_param_here":"",
+            "other_param_here":{
+                "other_param_here":"",
+                "other_param_here":"",
+                },
             "other_param_here":"",
             ...
             "condition_as_natural_langauge":["Small dataset."],
             "advice_to_improve_acc":["Use bigger dataset.","Use more simple model."]
         }}
-    """
+    """.replace("    ","")
 
     user_prompt = f"""
     # Here is a user's Jupyter Notebook script:{code}
@@ -50,32 +51,30 @@ def extract_experimental_conditions(code):
         response_format={"type": "json_object"},
     )
 
-    print(json.loads(response.choices[0].message.content))
+    # Parse the JSON string from `response.choices[0].message.content` into a dictionary
+    parsed_json = json.loads(response.choices[0].message.content)
 
+    # Format the dictionary to make it more readable (4-space indentation, non-ASCII characters displayed as is)
+    formatted_json = json.dumps(parsed_json, indent=4, ensure_ascii=False)
+
+    # Print the formatted JSON data
+    print(formatted_json)
+    
     return response.choices[0].message.content
 
 
 def log_to_wandb(response_text):
-    # print(response_text)
     wandb.log(json.loads(response_text))
 
 
-def log_llm(notebook_path, project_name, is_logging = False):
-    # import psutil
+def log_llm(notebook_path, project_name = None, is_logging = False):
 
-    # def get_notebook_name():
-    #     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-    #         if proc.info['name'] == 'python' and 'jupyter-notebook' in proc.info['cmdline']:
-    #             for cmd in proc.info['cmdline']:
-    #                 if cmd.endswith('.ipynb'):
-    #                     return cmd
-    #     return None
-
-    # notebook_name = get_notebook_name()
-    # print(f"Notebook Name: {notebook_name}")
-
+    
+    if project_name is None:
+        project_name = notebook_path.replace(".ipynb","")
+        
     # Initialize W&B
-    if is_logging is not True:
+    if is_logging:
         init_wandb(project_name)
 
     # Extract code from Jupyter Notebook
@@ -85,7 +84,7 @@ def log_llm(notebook_path, project_name, is_logging = False):
     response_text = extract_experimental_conditions(code_string)
 
     # Log response to W&B
-    if is_logging is not True:
+    if is_logging:
         log_to_wandb(response_text)
 
     print("Response from OpenAI logged to W&B.")
