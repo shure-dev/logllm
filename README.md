@@ -15,6 +15,8 @@
 
 **🔍 Automatic Extraction**: Effortlessly extracts code from Jupyter Notebook files using GPT4o, saving the logs to Weights & Biases (W&B) for seamless tracking and analysis.
 
+**🔍 Natural Language WandB Queries**: Effortlessly extract and display information from WandB logs using natural language queries. Simply ask in plain language, and get insights directly. For example, you could ask, "What was the most effective method using decision trees so far?" and receive the relevant data instantly.
+
 ## ⚙️ **Installation**
 
 To install the package, run the following command in your terminal:
