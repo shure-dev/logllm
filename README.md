@@ -46,7 +46,7 @@ logllm(notebook_path,project_name)
 
 # How it works, very simple!
 
-Target script:
+Target script: `svc-sample.ipynb`
 
 ```Python
 from sklearn import datasets
