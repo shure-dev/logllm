@@ -3,7 +3,10 @@
 
 # 🚀 **LogLLM** 🚀
 
-**Automate the extraction of experimental conditions from your Python scripts with GPT4o-mini, and log results using Weights & Biases (W&B).**
+	Is your ML script too cluttered for manual logging?
+    No worries—here’s the seamless solution you’ve been looking for.
+
+**This package automates the extraction of experimental conditions from your entire Python scripts with GPT4o-mini, and log results using Weights & Biases (W&B).**
 
 [🌐 **Project Website**](https://logllm.tiiny.site/) | [💬 **Discord Community**](https://discord.gg/3xvUV6xcKW)
 
