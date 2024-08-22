@@ -14,6 +14,7 @@ Automatically extracts code from Jupyter Notebook files with GPT4o then save ext
 ## Installation
 To install the package, run the following command in your terminal:
 ```bash
+git clone https://github.com/shure-dev/logllm.git
 pip install -e .
 ```
 
