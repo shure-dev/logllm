@@ -8,8 +8,8 @@ A package that automates the extraction of experimental conditions from your Pyt
 
 </div>
 
-## Features
-- Automatically extracts code from Jupyter Notebook files with GPT4o then save extracted logs to Weights & Biases (W&B) for easy tracking and analysis.
+## Feature
+Automatically extracts code from Jupyter Notebook files with GPT4o then save extracted logs to Weights & Biases (W&B) for easy tracking and analysis.
 
 ## Installation
 To install the package, run the following command in your terminal:
