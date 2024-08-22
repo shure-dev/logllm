@@ -51,5 +51,3 @@ Contributions are welcome! If you have suggestions or improvements, please feel 
 
 ## License
 This project is licensed under the MIT License.
-
-Launched by https://github.com/shure-dev
