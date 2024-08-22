@@ -2,7 +2,7 @@ import pytest
 import json  # jsonモジュールをインポート
 
 from logllm.extractor import extract_notebook_code
-from logllm.logllm import extract_experimental_conditions, logllm
+from logllm.log_llm import extract_experimental_conditions, logllm
 
 # サンプルのJupyter Notebookの内容を含むJSONを定義
 sample_notebook_content = {
