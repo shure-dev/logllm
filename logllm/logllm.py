@@ -2,44 +2,65 @@ from openai import OpenAI
 import wandb
 from .extractor import extract_notebook_code
 import json
-# import logging
 
-# wandb.logger.setLevel(logging.ERROR)
 
 def init_wandb(project_name):
     wandb.init(project=project_name, settings=wandb.Settings(_disable_stats=True))
 
+
 def extract_experimental_conditions(code):
     client = OpenAI()
-    
-    prompt = f"""
-        # Please extract all experimental conditions and results for logging via wandb api. 
-        # Extract all informaiton you can find the given script
-        # Output JSON schema:
+
+    system_prompt = """
+        # You are advanced machine learning experiment designer.
+        # Extract all experimental conditions and results for logging via wandb api. 
+        # Add your original params in your JSON responce if you want to log other params.
+        # Extract all informaiton you can find the given script as int, bool or float value.
+        # If you can not describe conditions with int, bool or float value, use list of natural language.
+        # Give advice to improve the acc.
+        # If you use natural language, answer should be very short.
+        # Do not include information already provided in param_name_1 for `condition_as_natural_langauge`.
+        # Output JSON schema example:
+        This is just a example, make it change as you want.
         {{
-            "param_name_1":"",
-            "param_name_2":"",
-            "condition":"here is condition as natural language description"
+            "method":"str",
+            "dataset":"str",
+            "task":"str",
+            "is_advanced_method":bool,
+            "is_latest_method":"",
+            "accuracy":"",
+            "other_param_here":"",
+            "other_param_here":"",
+            ...
+            "condition_as_natural_langauge":["Small dataset."],
+            "advice_to_improve_acc":["Use bigger dataset.","Use more simple model."]
         }}
-        # Here is a Jupyter Notebook script:{code}
     """
-    
+
+    user_prompt = f"""
+    # Here is a user's Jupyter Notebook script:{code}
+    """
+
     response = client.chat.completions.create(
         model="gpt-4o-mini-2024-07-18",
-        messages=[{"role": "user", "content": prompt}],
-        response_format = { "type": "json_object" }
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        response_format={"type": "json_object"},
     )
-    
+
     # print(response.choices[0].message.content)
-    
+
     return response.choices[0].message.content
+
 
 def log_to_wandb(response_text):
     print(response_text)
     wandb.log(json.loads(response_text))
 
+
 def logllm(notebook_path, project_name):
-    
     # import psutil
 
     # def get_notebook_name():
@@ -52,10 +73,10 @@ def logllm(notebook_path, project_name):
 
     # notebook_name = get_notebook_name()
     # print(f"Notebook Name: {notebook_name}")
-    
+
     # Initialize W&B
     init_wandb(project_name)
-    
+
     # Extract code from Jupyter Notebook
     code_string = extract_notebook_code(notebook_path)
 
