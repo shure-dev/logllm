@@ -60,7 +60,7 @@ def log_to_wandb(response_text):
     wandb.log(json.loads(response_text))
 
 
-def log_llm(notebook_path, project_name):
+def log_llm(notebook_path, project_name, is_demo = False):
     # import psutil
 
     # def get_notebook_name():
@@ -75,7 +75,8 @@ def log_llm(notebook_path, project_name):
     # print(f"Notebook Name: {notebook_name}")
 
     # Initialize W&B
-    init_wandb(project_name)
+    if is_demo is not True:
+        init_wandb(project_name)
 
     # Extract code from Jupyter Notebook
     code_string = extract_notebook_code(notebook_path)
@@ -84,6 +85,7 @@ def log_llm(notebook_path, project_name):
     response_text = extract_experimental_conditions(code_string)
 
     # Log response to W&B
-    log_to_wandb(response_text)
+    if is_demo is not True:
+        log_to_wandb(response_text)
 
     print("Response from OpenAI logged to W&B.")
