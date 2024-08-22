@@ -90,7 +90,7 @@ Expected condition with GPT4 from the script
 ```
 
 Prompt
-```Python
+```
 You are advanced machine learning experiment designer.
 Extract all experimental conditions and results for logging via wandb api. 
 Add your original params in your JSON responce if you want to log other params.
