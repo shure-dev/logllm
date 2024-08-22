@@ -1,3 +1,4 @@
 openai
 wandb
 ipynbname
+scikit-learn
