@@ -3,8 +3,10 @@
 
 # 🚀 **LogLLM** 🚀
 
-	Is your ML script too cluttered for manual logging?
-    No worries—here’s the seamless solution you’ve been looking for.
+```
+Is your ML script too cluttered for manual logging?
+No worries—here’s the seamless solution you’ve been looking for.
+```
 
 **This package automates the extraction of experimental conditions from your entire Python scripts with GPT4o-mini, and log results using Weights & Biases (W&B).**
 
