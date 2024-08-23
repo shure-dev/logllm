@@ -11,6 +11,10 @@
 
 [🌐 **Project Website**](https://logllm.tiiny.site/) | [💬 **Discord Community**](https://discord.gg/3xvUV6xcKW)
 
+
+![image](./images/logllm-overview.png)
+
+
 </div>
 
 ---
