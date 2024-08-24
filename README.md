@@ -1,15 +1,14 @@
 
 <div align="center">
 
+[🌐 **Project Website**](https://logllm.tiiny.site/) | [💬 **Discord Community**](https://discord.gg/3xvUV6xcKW)
+
 # 🚀 **LogLLM** 🚀
 
+**LLM-Enhanced ML Experiment Logging System**
 
-`Is your ML script too cluttered for manual logging? 😵 `   
-`No worries—here’s the seamless solution you’ve been looking for! ✨`
 
-**This package automates the extraction of experimental conditions from your entire Python scripts with GPT4o-mini, and log results using Weights & Biases (W&B).**
-
-[🌐 **Project Website**](https://logllm.tiiny.site/) | [💬 **Discord Community**](https://discord.gg/3xvUV6xcKW)
+`Ever found yourself lost in a maze of changing experiment conditions in your early ML scripts? 😵 No worries—here’s the solution you’ve been looking for! ✨`
 
 
 ![image](./images/logllm-overview.png)
@@ -21,9 +20,9 @@
 
 ## ✨ **Features**
 
-**🔍 Automatic Extraction**: Effortlessly extracts code from Jupyter Notebook files using GPT4o, saving the logs to Weights & Biases (W&B) for seamless tracking and analysis.
+**🔍 Automatic Logging**: Effortlessly extracts code from Jupyter Notebook files using GPT4o, saving the logs to Weights & Biases (W&B) for seamless tracking and analysis.
 
-**🔍 Natural Language WandB Queries**: Effortlessly extract and display information from WandB logs using natural language queries. Simply ask in plain language, and get insights directly. For example, you could ask, "What was the most effective method using decision trees so far?" and receive the relevant data instantly.
+**💬 Natural Language Queries**: Effortlessly extract and display information from WandB logs using natural language queries. Simply ask in plain language, and get insights directly. For example, you could ask, "What was the most effective method using decision trees so far?" and receive the relevant data instantly.
 
 ## ⚙️ **Installation**
 
@@ -45,6 +44,8 @@ export OPENAI_API_KEY="your-openai-api-key"
 wandb login
 ```
 
+### 🔍 Automatic Logging
+
 **Sample Notebook Script: `sample-script.ipynb`**
 
 ```python
@@ -59,6 +60,10 @@ notebook_path = "sample-script.ipynb"  # The target file to log
 
 log_llm(notebook_path)
 ```
+
+### 💬 Natural Language Queries
+- developing now,,,
+
 
 ## 🧠 **How It Works: Simple and Powerful!**
 
