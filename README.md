@@ -7,9 +7,7 @@
 
 **LLM-Enhanced ML Experiment Logging System**
 
-
 `Ever found yourself lost in a maze of changing experiment conditions in your early ML scripts? 😵 No worries—here’s the solution you’ve been looking for! ✨`
-
 
 ![image](./images/logllm-overview.png)
 
@@ -33,16 +31,17 @@ git clone https://github.com/shure-dev/logllm.git
 pip install -e .
 ```
 
-This command installs the package in editable mode, allowing you to modify the code and see changes without reinstalling.
-
-## 🚀 **Usage**
-
-Here’s a simplified example of how to use the package:
-
 ```bash
 export OPENAI_API_KEY="your-openai-api-key"
 wandb login
 ```
+
+This command installs the package in editable mode, allowing you to modify the code and see changes without reinstalling.
+
+
+## 🚀 **Usage**
+
+Here’s a simplified example of how to use the package:
 
 ### 🔍 Automatic Logging
 
