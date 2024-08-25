@@ -1,1 +1,1 @@
-from .log_llm import log_llm
+from .llm_model import log_llm
