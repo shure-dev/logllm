@@ -7,7 +7,6 @@ import json
 def init_wandb(project_name):
     wandb.init(project=project_name, settings=wandb.Settings(_disable_stats=True))
 
-
 def extract_experimental_conditions(code):
     client = OpenAI()
 
@@ -65,7 +64,6 @@ def extract_experimental_conditions(code):
 
 def log_to_wandb(response_text):
     wandb.log(json.loads(response_text))
-
 
 def log_llm(notebook_path, project_name = None, is_logging = False):
 
