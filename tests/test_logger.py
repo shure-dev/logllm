@@ -1,7 +1,7 @@
 import pytest
 import json
-from logllm.llm_model import log_llm
-from logllm.extractor import extract_notebook_code
+from llm_model import log_llm
+from extractor import extract_notebook_code
 import google.generativeai as genai
 from google.generativeai import GenerativeModel
 import os

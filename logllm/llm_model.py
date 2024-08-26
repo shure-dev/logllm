@@ -33,17 +33,43 @@ def extract_experimental_conditions(code):
            "condition_as_natural_language": ["Small dataset."],
         "advice_to_improve_acc": ["Use a bigger dataset.", "Use a simpler model."]
         Here is a user's Jupyter Notebook script:{code}
-        Your answers shuold be converted to a dictionary ouput.
-    """.replace("    ", "")
 
+    Your answers should return a dictionary like this: 
+    "method": "SVC",
+    "dataset": "Iris",
+    "task": "classification",
+    "accuracy": 1.0,
+    "C": 1.0,
+    "degree": 3,
+    "tol": 0.001,
+    "cache_size": 200,
+    "max_iter": -1,
+    "test_size": 0.2,
+    "random_state": 42,
+    "kernel": "linear",
+    "condition_as_natural_langauge": [
+        "Using linear kernel on SVC model.",
+        "Excluding class 2 from Iris dataset.",
+        "Splitting data into 80% training and 20% testing."
+    ],
+    "advice_to_improve_acc": [
+        "Consider using cross-validation for better performance evaluation.",
+        "Experiment with different kernels to optimize results.",
+        "Increase the dataset size to improve generalization."
+    ]
+}
+    Remeber this is just an example how the data shuold be returned.
 
-    model = genai.GenerativeModel("gemini-1.5-pro", generation_config={"response_mime_type": "application/json"},
-                               system_instruction="You are an advanced machine learning expert that is responsible for making realistic prdedictions and recommendations on machine learning patterns")
+    """
+
+    model = genai.GenerativeModel("gemini-1.5-pro", 
+                                  generation_config={"response_mime_type": "application/json"},
+                                  system_instruction="You are an advanced machine learning expert that is responsible for making realistic prdedictions and recommendations on machine learning patterns")
     response = model.generate_content(system_prompt)
 
     
     # Print for debugging
-    # print(f"Response content: {response}")
+    print(f"Response content: {response}")
 
     # Return the extracted JSON content
     return response
@@ -104,13 +130,15 @@ def log_llm(notebook_path, project_name=None, is_logging=False):
     # Extract code from Jupyter Notebook
     code_string = extract_notebook_code(notebook_path)
 
-    # Send code to Google Generative AI for processing
+     # Send code to Google Generative AI for processing
     parsed_json = extract_experimental_conditions(code_string)
-
+   
     # Log the response to W&B
     if is_logging and parsed_json:
         log_to_wandb(parsed_json)
 
     print("Response from Google Generative AI processed and logged to W&B.")
 
-    print(parsed_json)  # Inspect the response to ensure it's valid JSON
+    print("Dictionary: ", parsed_json)  # Inspect the response to ensure it's valid JSON
+
+

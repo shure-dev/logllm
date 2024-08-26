@@ -1,5 +1,4 @@
 from llm_model import log_llm
-import os
 
 notebook_path = "demos/svc-sample.ipynb" # Here is target file to log
 
