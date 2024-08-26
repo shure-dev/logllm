@@ -1,6 +1,6 @@
 import google.generativeai as genai
 import wandb
-from logllm.extractor import extract_notebook_code
+from extractor import extract_notebook_code
 import json
 import os
 
@@ -12,38 +12,38 @@ def init_wandb(project_name):
 
 def extract_experimental_conditions(code):
     system_prompt = """
-        # You are an advanced machine learning experiment designer.
-        # Extract all experimental conditions and results for logging via wandb API. 
-        # Add your original parameters in your JSON response if you want to log other parameters.
-        # Extract all information you can find in the given script as int, bool, or float values.
-        # If you cannot describe conditions with int, bool, or float values, use a list of natural language.
-        # Give advice to improve the accuracy.
-        # If you use natural language, the answers should be very short.
-        # Do not include information already provided in param_name_1 for `condition_as_natural_language`.
-        # Output JSON schema example:
-        # {{
-        #     "method": "str",
-        #     "dataset": "str",
-        #     "task": "str",
-        #     "accuracy": float,
-        #     "other_param_here": {{
-        #         "param1": int,
-        #         "param2": int
-        #     }},
-        #     "condition_as_natural_language": ["Small dataset."],
-        #     "advice_to_improve_acc": ["Use a bigger dataset.", "Use a simpler model."]
-        # }}
-            # Here is a user's Jupyter Notebook script:{code}
-
+         You are an advanced machine learning experiment designer.
+         Extract all experimental conditions and results for logging via wandb API. 
+         Add your original parameters in your JSON response if you want to log other parameters.
+         Extract all information you can find in the given script as int, bool, or float values.
+         If you cannot describe conditions with int, bool, or float values, use a list of natural language.
+         Give advice to improve the accuracy.
+         If you use natural language, the answers should be very short.
+         Do not include information already provided in param_name_1 for `condition_as_natural_language`.
+         Output JSON schema example:
+         {{
+             "method": "str",
+             "dataset": "str",
+             "task": "str",
+             "accuracy": float,
+             "other_param_here": {{
+                "param1": int,
+             "param2": int
+            }},
+           "condition_as_natural_language": ["Small dataset."],
+        "advice_to_improve_acc": ["Use a bigger dataset.", "Use a simpler model."]
+        Here is a user's Jupyter Notebook script:{code}
+        Your answers shuold be converted to a dictionary ouput.
     """.replace("    ", "")
 
 
-    model = genai.GenerativeModel("gemini-1.5-pro", generation_config={"response_mime_type": "application/json"})
+    model = genai.GenerativeModel("gemini-1.5-pro", generation_config={"response_mime_type": "application/json"},
+                               system_instruction="You are an advanced machine learning expert that is responsible for making realistic prdedictions and recommendations on machine learning patterns")
     response = model.generate_content(system_prompt)
 
     
     # Print for debugging
-    print(f"Response content: {response}")
+    # print(f"Response content: {response}")
 
     # Return the extracted JSON content
     return response
