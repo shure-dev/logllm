@@ -1,7 +1,11 @@
-from openai import OpenAI
+import google.generativeai as genai
+import os 
+
+genai.configure(api_key=os.environ['API_KEY'])
 
 def query(user_input: str):
-    client = OpenAI()
+    model = genai.GenerativeModel("gemini-1.5-flash")
+
 
     system_prompt = """
         # Convert the following query to a W&B API query:
@@ -11,9 +15,8 @@ def query(user_input: str):
     # Here is a user's :{user_input}
     """
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini-2024-07-18",
-        messages=[
+    response = model.start_chat(
+        history=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ]
