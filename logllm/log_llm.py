@@ -1,76 +1,94 @@
-from openai import OpenAI
+import google.generativeai as genai
 import wandb
-from .extractor import extract_notebook_code
+from extractor import extract_notebook_code
 import json
+import os
 
+genai.configure(api_key=os.environ['API_KEY'])
 
 def init_wandb(project_name):
     wandb.init(project=project_name, settings=wandb.Settings(_disable_stats=True))
 
+
 def extract_experimental_conditions(code):
-    client = OpenAI()
-
     system_prompt = """
-        # You are advanced machine learning experiment designer.
-        # Extract all experimental conditions and results for logging via wandb api. 
-        # Add your original params in your JSON responce if you want to log other params.
-        # Extract all informaiton you can find the given script as int, bool or float value.
-        # If you can not describe conditions with int, bool or float value, use list of natural language.
-        # Give advice to improve the acc.
-        # If you use natural language, answer should be very short.
-        # Do not include information already provided in param_name_1 for `condition_as_natural_langauge`.
-        # Output JSON schema example:
-        This is just a example, make it change as you want. Use nested dictionally if nessasary.
-        {{
-            "method":"str",
-            "dataset":"str",
-            "task":"str",
-            "accuracy":"",
-            "other_param_here":{
-                "other_param_here":"",
-                "other_param_here":"",
-                },
-            "other_param_here":"",
-            ...
-            "condition_as_natural_langauge":["Small dataset."],
-            "advice_to_improve_acc":["Use bigger dataset.","Use more simple model."]
-        }}
-    """.replace("    ","")
+         You are an advanced machine learning experiment designer.
+         Extract all experimental conditions and results for logging via wandb API. 
+         Add your original parameters in your JSON response if you want to log other parameters.
+         Extract all information you can find in the given script as int, bool, or float values.
+         If you cannot describe conditions with int, bool, or float values, use a list of natural language.
+         Give advice to improve the accuracy.
+         If you use natural language, the answers should be very short.
+         Do not include information already provided in param_name_1 for `condition_as_natural_language`.
+         Output JSON schema example:
+         {{
+             "method": "str",
+             "dataset": "str",
+             "task": "str",
+             "accuracy": float,
+             "other_param_here": {{
+                "param1": int,
+             "param2": int
+            }},
+           "condition_as_natural_language": ["Small dataset."],
+        "advice_to_improve_acc": ["Use a bigger dataset.", "Use a simpler model."]
+        Here is a user's Jupyter Notebook script:{code}
 
-    user_prompt = f"""
-    # Here is a user's Jupyter Notebook script:{code}
+    Your answers should return a dictionary like this: 
+    "method": "SVC",
+    "dataset": "Iris",
+    "task": "classification",
+    "accuracy": 1.0,
+    "C": 1.0,
+    "degree": 3,
+    "tol": 0.001,
+    "cache_size": 200,
+    "max_iter": -1,
+    "test_size": 0.2,
+    "random_state": 42,
+    "kernel": "linear",
+    "condition_as_natural_langauge": [
+        "Using linear kernel on SVC model.",
+        "Excluding class 2 from Iris dataset.",
+        "Splitting data into 80% training and 20% testing."
+    ],
+    "advice_to_improve_acc": [
+        "Consider using cross-validation for better performance evaluation.",
+        "Experiment with different kernels to optimize results.",
+        "Increase the dataset size to improve generalization."
+    ]
+}
+    Remeber this is just an example how the data shuold be returned.
+
     """
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini-2024-07-18",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format={"type": "json_object"},
-    )
+    model = genai.GenerativeModel("gemini-1.5-pro", 
+                                  generation_config={"response_mime_type": "application/json"},
+                                  system_instruction="You are an advanced machine learning expert that is responsible for making realistic prdedictions and recommendations on machine learning patterns")
+    response = model.generate_content(system_prompt)
 
-    # Parse the JSON string from `response.choices[0].message.content` into a dictionary
-    parsed_json = json.loads(response.choices[0].message.content)
-
-    # Format the dictionary to make it more readable (4-space indentation, non-ASCII characters displayed as is)
-    formatted_json = json.dumps(parsed_json, indent=4, ensure_ascii=False)
-
-    # Print the formatted JSON data
-    print(formatted_json)
     
-    return response.choices[0].message.content
+    # Print for debugging
+    print(f"Response content: {response}")
 
+    # Return the extracted JSON content
+    return response
 
 def log_to_wandb(response_text):
-    wandb.log(json.loads(response_text))
+    try:
+        # Parse the response text into a dictionary
+        response_dict = json.loads(response_text)
+        # Log the dictionary to W&B
+        wandb.log(response_dict)
+    except json.JSONDecodeError as e:
+        print(f"Error parsing JSON: {e}")
+    except Exception as e:
+        print(f"Error logging to W&B: {e}")
 
-def log_llm(notebook_path, project_name = None, is_logging = False):
-
-    
+def log_llm(notebook_path, project_name=None, is_logging=False):
     if project_name is None:
-        project_name = notebook_path.replace(".ipynb","")
-        
+        project_name = notebook_path.replace(".ipynb", "")
+
     # Initialize W&B
     if is_logging:
         init_wandb(project_name)
@@ -78,11 +96,49 @@ def log_llm(notebook_path, project_name = None, is_logging = False):
     # Extract code from Jupyter Notebook
     code_string = extract_notebook_code(notebook_path)
 
-    # Send code to OpenAI
+    # Send code to Generative AI
     response_text = extract_experimental_conditions(code_string)
 
     # Log response to W&B
     if is_logging:
         log_to_wandb(response_text)
 
-    print("Response from OpenAI logged to W&B.")
+    print("Response from Google Generative AI processed and logged to W&B.")
+    
+
+    
+
+def log_to_wandb(parsed_json):
+    if parsed_json:
+        try:
+            # Log the parsed JSON to W&B
+            wandb.log(parsed_json)
+        except Exception as e:
+            print(f"Error logging to W&B: {e}")
+    else:
+        print("No data to log. Parsed JSON is empty or None.")
+
+
+def log_llm(notebook_path, project_name=None, is_logging=False):
+    if project_name is None:
+        project_name = os.path.basename(notebook_path).replace(".ipynb", "")
+    
+    # Initialize W&B
+    if is_logging:
+        init_wandb(project_name)
+
+    # Extract code from Jupyter Notebook
+    code_string = extract_notebook_code(notebook_path)
+
+     # Send code to Google Generative AI for processing
+    parsed_json = extract_experimental_conditions(code_string)
+   
+    # Log the response to W&B
+    if is_logging and parsed_json:
+        log_to_wandb(parsed_json)
+
+    print("Response from Google Generative AI processed and logged to W&B.")
+
+    print("Dictionary: ", parsed_json)  # Inspect the response to ensure it's valid JSON
+
+
