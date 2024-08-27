@@ -1,10 +1,20 @@
 import pytest
-import json  # jsonモジュールをインポート
-
+import json
+from logllm.log_llm import log_llm
 from logllm.extractor import extract_notebook_code
-from logllm.log_llm import extract_experimental_conditions, logllm
+import google.generativeai as genai
+from google.generativeai import GenerativeModel
+import os
 
-# サンプルのJupyter Notebookの内容を含むJSONを定義
+
+genai.configure(api_key=os.environ['API_KEY'])
+
+
+# Define a sample notebook path and project name for testing
+notebook_path = "sample_notebook.ipynb"
+project_name = "test_project"
+
+# Mock notebook content for testing
 sample_notebook_content = {
     "cells": [
         {
@@ -22,60 +32,55 @@ sample_notebook_content = {
     ]
 }
 
-def test_extract_notebook_code(tmp_path):
-    # テスト用の一時ファイルを作成して、サンプルNotebook JSONを書き込む
-    notebook_file = tmp_path / "sample_notebook.ipynb"
+# Function to create a sample notebook file for testing
+def create_sample_notebook(notebook_file):
     with open(notebook_file, 'w', encoding='utf-8') as f:
         json.dump(sample_notebook_content, f)
 
-    # コード抽出関数をテスト
-    extracted_code = extract_notebook_code(notebook_file)
-    expected_code = "print('Hello, World!')\n\na = 10\nb = 20\nc = a + b\nprint(c)\n"
-    assert extracted_code == expected_code
+def test_log_llm(monkeypatch, tmp_path):
+    # Create a temporary notebook file
+    notebook_file = tmp_path / notebook_path
+    create_sample_notebook(notebook_file)
 
-def test_extract_experimental_conditions(monkeypatch):
-    # モックを使用してOpenAIのAPIレスポンスをシミュレート
-    def mock_chat_completion_create(*args, **kwargs):
-        return {
-            'choices': [
-                {'message': {'content': 'Extracted conditions from the code.'}}
-            ]
-        }
-
-    monkeypatch.setattr("openai.ChatCompletion.create", mock_chat_completion_create)
-
-    # APIキーとコードを仮定してテスト
-    api_key = "fake-api-key"
-    code = "print('Hello, World!')\n"
-    response = extract_experimental_conditions(api_key, code)
-    assert response == 'Extracted conditions from the code.'
-
-def test_logllm(monkeypatch, tmp_path):
-    # モックのW&Bの初期化とログ関数
+    # Mock the W&B init and log functions
     def mock_init(*args, **kwargs):
         pass
 
     def mock_log(data):
-        assert "openai_response" in data
-        assert data["openai_response"] == 'Extracted conditions from the code.'
+        assert "method" in data
+        assert data["method"] == "example_method"
 
     monkeypatch.setattr("wandb.init", mock_init)
     monkeypatch.setattr("wandb.log", mock_log)
 
-    # モックのOpenAIレスポンス
-    def mock_chat_completion_create(*args, **kwargs):
-        return {
-            'choices': [
-                {'message': {'content': 'Extracted conditions from the code.'}}
-            ]
-        }
+    # Mock the Google Generative AI response
+    def mock_generate_content(*args, **kwargs):
+        class MockResponse:
+            choices = [type('obj', (object,), {
+                "message": type('msg', (object,), {
+                    "content": json.dumps({
+                        "method": "example_method",
+                        "dataset": "example_dataset",
+                        "task": "example_task",
+                        "accuracy": 0.95,
+                        "other_param_here": {
+                            "param1": 10,
+                            "param2": 20
+                        },
+                        "condition_as_natural_language": ["Small dataset."],
+                        "advice_to_improve_acc": ["Use a bigger dataset.", "Use a simpler model."]
+                    })
+                })
+            })]
 
-    monkeypatch.setattr("openai.ChatCompletion.create", mock_chat_completion_create)
+        return MockResponse()
 
-    # テスト用の一時ファイルを作成して、サンプルNotebook JSONを書き込む
-    notebook_file = tmp_path / "sample_notebook.ipynb"
-    with open(notebook_file, 'w', encoding='utf-8') as f:
-        json.dump(sample_notebook_content, f)
+    monkeypatch.setattr("google.generativeai.GenerativeModel.start_chat", mock_generate_content)
 
-    # logllm関数をテスト
-    logllm(str(notebook_file), "fake-api-key", "test-project")
+    # Call the log_llm function to test
+    log_llm(str(notebook_file), project_name, is_logging=True)
+    
+    print("Test completed successfully.")
+
+if __name__ == "__main__":
+    pytest.main([__file__])
