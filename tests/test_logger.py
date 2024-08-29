@@ -2,12 +2,8 @@ import pytest
 import json
 from logllm.log_llm import log_llm
 from logllm.extractor import extract_notebook_code
-import google.generativeai as genai
-from google.generativeai import GenerativeModel
-import os
 
 
-genai.configure(api_key=os.environ['API_KEY'])
 
 
 # Define a sample notebook path and project name for testing
