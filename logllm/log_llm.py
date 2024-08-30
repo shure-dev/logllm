@@ -120,3 +120,4 @@ def log_llm(notebook_path, project_name=None, is_logging=False, provider=None):
         log_to_wandb(parsed_json)
 
     print("Response from the provider processed and logged to W&B.")
+    return parsed_json

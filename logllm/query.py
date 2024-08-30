@@ -2,13 +2,20 @@ import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 import openai
-from logllm.log_llm import log_llm
+from logllm.extractor import extract_notebook_code
 
 # Load environment variables
 load_dotenv()
 
 # Configure Google Generative AI API Key
 genai.configure(api_key=os.getenv('API_KEY'))
+generation_config = {
+    "temperature": 0,
+    "top_p": 0.95,
+    "top_k": 64,
+    "max_output_tokens": 8192,
+    "response_mime_type": "text/plain",
+}
 
 # Function to query OpenAI
 def query_openai(user_input: str):
@@ -33,20 +40,20 @@ def query_openai(user_input: str):
 
 # Function to query Google Gemini
 def query_gemini(user_input: str):
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-1.5-flash", generation_config=generation_config)
 
     system_prompt = """
-        Convert the following query to a W&B API query:
+        Please provide the data you want me to convert to a W&B API query:
     """.strip()
 
     user_prompt = f"""
     Here is a user's query: {user_input}
-    """.strip()
+    """
 
     chat_session = model.start_chat(
         history=[
-            {"role": "system", "parts": [system_prompt]},
             {"role": "user", "parts": [user_prompt]},
+            {"role": "model", "parts": [system_prompt]},
         ]
     )
 
@@ -54,6 +61,7 @@ def query_gemini(user_input: str):
     return response.candidates[0].content.parts[0].text
 
 # General query function that calls the appropriate provider
+
 def query(user_input: str, provider: str):
     if provider == 'openai':
         return query_openai(user_input)
@@ -61,15 +69,7 @@ def query(user_input: str, provider: str):
         return query_gemini(user_input)
     else:
         raise ValueError("Invalid provider specified. Use 'openai' or 'gemini'.")
+        
 
 # Usage Example:
-notebook_path = "demos/svc-sample.ipynb" 
 
-# Extract experimental conditions and results using log_llm
-parsed_json = log_llm(notebook_path, project_name="Machine learning", is_logging=False, provider="gemini")
-
-# Use the parsed_json as user_input for the query
-response = query("what is the best model? :{parsed_json}", provider="gemini")
-
-# Print the response from the query
-print(response)
