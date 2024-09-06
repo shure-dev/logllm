@@ -91,9 +91,9 @@ def extract_experimental_conditions(provider, code):
         raise ValueError("Invalid provider specified. Use 'gemini' or 'openai'.")
 
     # Parse the result from JSON string to Python dictionary
-    parsed_json = json.loads(result)
+    result = json.loads(result)
     # Format the JSON output for better readability
-    return json.dumps(parsed_json, indent=4, ensure_ascii=False)
+    return json.dumps(result, indent=4, ensure_ascii=False)
 
 # Function to log the extracted information to Weights & Biases (W&B)
 def log_to_wandb(response_text):

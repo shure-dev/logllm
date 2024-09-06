@@ -2,7 +2,7 @@ import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 import openai
-from logllm.extractor import extract_notebook_code
+from logllm.log_llm import log_llm
 
 # Load environment variables
 load_dotenv()
@@ -39,8 +39,9 @@ def query_openai(user_input: str):
     return response['choices'][0]['message']['content']
 
 # Function to query Google Gemini
-def query_gemini(user_input: str):
+def query_gemini(user_input: str, code):
     model = genai.GenerativeModel("gemini-1.5-flash", generation_config=generation_config)
+    user_input = f"{code}"
 
     system_prompt = """
         Please provide the data you want me to convert to a W&B API query:
@@ -52,8 +53,8 @@ def query_gemini(user_input: str):
 
     chat_session = model.start_chat(
         history=[
-            {"role": "user", "parts": [user_prompt]},
             {"role": "model", "parts": [system_prompt]},
+            {"role": "user", "parts": [user_prompt]},
         ]
     )
 
