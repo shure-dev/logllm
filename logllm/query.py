@@ -63,11 +63,11 @@ def query_gemini(user_input: str, code):
 
 # General query function that calls the appropriate provider
 
-def query(user_input: str, provider: str):
+def query(provider):
     if provider == 'openai':
-        return query_openai(user_input)
+        return query_openai()
     elif provider == 'gemini':
-        return query_gemini(user_input)
+        return query_gemini()
     else:
         raise ValueError("Invalid provider specified. Use 'openai' or 'gemini'.")
         
